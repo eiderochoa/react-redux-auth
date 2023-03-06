@@ -4,6 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setCredentials } from './authSlice'
 import { useLoginMutation } from './authApiSlice'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Card from 'react-bootstrap/Card';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import DB_header_login_img from '../../images/db_header_login_img.png';
 
 const Login = () => {
     const userRef = useRef()
@@ -83,10 +88,52 @@ const Login = () => {
             </form>
         </section>
     )
+
+    const content2 = (
+        <Row xs={1} md={2} lg={3} className="g-4 mt-2" style={{marginLeft:"0",marginRight:"0"}}>
+        <Col className="mx-auto">
+          <Card>
+            <Card.Img variant="top" src={DB_header_login_img} />
+            <Card.Body>
+              <Card.Title className="text-center">Login</Card.Title>
+                <div className="Auth-form-container">
+                  <form className="Auth-form" onSubmit={handleSubmit}>
+                   <div className="Auth-form-content">
+                     <div className="form-group mt-3">
+                       <label>Username</label>
+                       <input className="form-control mt-1" 
+                         placeholder="Enter Username" 
+                         name='username'  
+                         type='text' value={username}
+                         required 
+                         onChange={e => setUsername(e.target.value)}/>
+                     </div>
+                     <div className="form-group mt-3">
+                       <label>Password</label>
+                       <input name='password' 
+                         type="password"     
+                         className="form-control mt-1"
+                         placeholder="Enter password"
+                         value={password}
+                         required
+                         onChange={e => setPassword(e.target.value)}/>
+                     </div>
+                     <div className="d-grid gap-2 mt-3">
+                       <button type="submit" 
+                          className="btn btn-primary">Submit</button>
+                     </div>
+                   </div>
+                </form>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    )
     
     
 
-  return content
+  return content2
 }
 
 export default Login
