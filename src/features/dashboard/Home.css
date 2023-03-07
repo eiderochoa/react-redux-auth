@@ -1,0 +1,8 @@
+.content-right-wrapper{
+    padding: 1rem;
+    border-radius: .5rem;
+    border: 3px rgb(221, 220, 220) solid;
+}
+body{
+    background-color: rgb(207, 209, 207);
+}

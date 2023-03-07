@@ -1,9 +1,9 @@
-import React from 'react'
-import { useRef, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { setCredentials } from './authSlice'
-import { useLoginMutation } from './authApiSlice'
+import React from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from './authSlice';
+import { useLoginMutation } from './authApiSlice';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
@@ -38,7 +38,7 @@ const Login = () => {
             dispatch(setCredentials({ ...userData, username }));
             setUsername('');
             setPassword('');
-            navigate('/welcome');
+            navigate('/dashboard');
         } catch (err) {
             if (!err?.originalStatus) {
                 // isLoading: true until timeout occurs
@@ -103,7 +103,8 @@ const Login = () => {
                        <label>Username</label>
                        <input className="form-control mt-1" 
                          placeholder="Enter Username" 
-                         name='username'  
+                         name='username'
+                         ref={userRef}  
                          type='text' value={username}
                          required 
                          onChange={e => setUsername(e.target.value)}/>

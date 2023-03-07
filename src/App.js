@@ -9,6 +9,8 @@ import Login from './features/auth/Login'
 import Welcome from './features/auth/Welcome'
 import RequireAuth from './features/auth/RequireAuth'
 import UsersList from './features/users/UsersList'
+import { Home } from './features/dashboard/Home';
+import { UserManagementDataGrid } from './features/dashboard/usermanager/UserManagement-datagrid';
 
 function App() {
   return (
@@ -20,8 +22,10 @@ function App() {
 
         {/* protected routes */}
         <Route element={<RequireAuth />}>
+          <Route path="dashboard/*" element={<Home/>}/>
           <Route path="welcome" element={<Welcome />} />
           <Route path="userslist" element={<UsersList />} />
+          {/* <Route path="/dashboard/usermanager" element={<UserManagementDataGrid/>}/> */}
         </Route>
 
       </Route>
