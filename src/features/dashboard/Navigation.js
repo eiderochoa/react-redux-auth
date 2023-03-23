@@ -5,6 +5,7 @@ import React, { useState, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { UserMenu } from './UserMenu';
+import { Link } from 'react-router-dom';
 
 export function Navigation() {
    const [isAuth, setIsAuth] = useState(false);
@@ -35,7 +36,8 @@ export function Navigation() {
               <Offcanvas.Body>
                 <Nav className="justify-content-start flex-grow-1 pe-3 d-block d-lg-none">
                   <Nav.Link href="#action1">Home</Nav.Link>
-                  <Nav.Link href="/dashboard/usermanager">User Management</Nav.Link>
+                  {/* <Nav.Link href="/dashboard/usermanager">User Management</Nav.Link> */}
+                  <Link className='nav-link' to="/dashboard/usermanager">User Manager</Link>
                 </Nav>
                 <UserMenu/>
               </Offcanvas.Body>

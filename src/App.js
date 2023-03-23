@@ -10,7 +10,6 @@ import Welcome from './features/auth/Welcome'
 import RequireAuth from './features/auth/RequireAuth'
 import UsersList from './features/users/UsersList'
 import { Home } from './features/dashboard/Home';
-import { UserManagementDataGrid } from './features/dashboard/usermanager/UserManagement-datagrid';
 
 function App() {
   return (

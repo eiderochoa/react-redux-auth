@@ -9,6 +9,7 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import DB_header_login_img from '../../images/db_header_login_img.png';
+import { Alert, Snackbar } from '@mui/material';
 
 const Login = () => {
     const userRef = useRef()
@@ -17,9 +18,13 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [errMsg, setErrMsg] = useState('')
     const navigate = useNavigate()
+    const [snackError, setSnackError] = useState(false);
 
     const [login, { isLoading }] = useLoginMutation()
     const dispatch = useDispatch()
+
+    const handleSnackShow = () => setSnackError(true);
+    const handleSnackHide = () => setSnackError(false);
 
     useEffect(() => {
       userRef.current.focus();
@@ -90,6 +95,7 @@ const Login = () => {
     )
 
     const content2 = (
+      <>
         <Row xs={1} md={2} lg={3} className="g-4 mt-2" style={{marginLeft:"0",marginRight:"0"}}>
         <Col className="mx-auto">
           <Card>
@@ -130,6 +136,12 @@ const Login = () => {
           </Card>
         </Col>
       </Row>
+      {errMsg?(<Snackbar open={snackError} autoHideDuration={6000} onClose={handleSnackHide}>
+        <Alert onClose={handleSnackHide} severity="error" sx={{ width: '100%' }}>
+        {errMsg}
+        </Alert>
+    </Snackbar>):(<></>)} 
+    </>
     )
     
     

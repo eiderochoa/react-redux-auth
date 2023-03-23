@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, Switch, TextField } from '@mui/material';
+import { Box, FormControlLabel, Switch, TextField, CircularProgress } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import BotonMUI from '@mui/material/Button';
 import SendIcon  from '@mui/icons-material/Send';
@@ -15,7 +15,7 @@ const initialForm={
     is_active: true,
 } 
 
-export const UserForm = ({addUser, updUser,dataToEdit, setDataToEdit, formErrors}) =>{
+export const UserForm = ({addUser, updUser,dataToEdit, setDataToEdit, formErrors, formAddUserLoading, formUpdUserLoading}) =>{
     const [form, setForm] = useState(initialForm);
 
     useEffect(()=>{
@@ -204,7 +204,7 @@ export const UserForm = ({addUser, updUser,dataToEdit, setDataToEdit, formErrors
                     </div>
                     <hr/>
                     <div className='col-2 mx-auto'>
-                        <BotonMUI type='submit' variant="contained" endIcon={<SendIcon />}>
+                        <BotonMUI type='submit' variant="contained" endIcon={formAddUserLoading || formUpdUserLoading? <CircularProgress size={20} color='inherit'/>: <SendIcon />}>
                         Send
                         </BotonMUI>
                     </div>

@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Alert, IconButton, Tooltip, Box } from '@mui/material';
+import { Alert, IconButton, Tooltip, Box, CircularProgress } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';
+import { useListGroupsQuery } from './usersApiSlice';
 
 export const GroupDataGrid = () =>{
     const [data, setData] = useState([]);
+    const {data: groups, isLoading} = useListGroupsQuery();
 
-
-    useEffect(() => {
-      getGroups();
-    }, [])
+    // useEffect(() => {
+    //   getGroups();
+    // }, [])
     
 
     const columns = [
@@ -77,15 +78,18 @@ export const GroupDataGrid = () =>{
 
     return(
         <>
-        <Box sx={{ height: 400, width: '100%' }}>
+        {isLoading?<CircularProgress/>:(
+            <Box sx={{ height: 400, width: '100%' }}>
             <DataGrid 
-                rows={data}
+                rows={groups}
                 columns={columns}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
                 checkboxSelection                    
                 />
         </Box>
+        )}
+        
         </>
     );
 }
