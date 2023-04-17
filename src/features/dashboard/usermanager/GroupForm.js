@@ -1,6 +1,15 @@
-import { Box, Button, FormControl, InputLabel, Select, TextField } from '@mui/material';
+import { Box, Button, CircularProgress, TextField } from '@mui/material';
 import React from 'react';
 import { Modal } from 'react-bootstrap';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+
+import { useGetPermissionsQuery } from './usersApiSlice';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -14,28 +23,31 @@ const MenuProps = {
 };
 
 const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-  ];
+  'Oliver Hansen',
+  'Van Henry',
+  'April Tucker',
+  'Ralph Hubbard',
+  'Omar Alexander',
+  'Carlos Abbott',
+  'Miriam Wagner',
+  'Bradley Wilkerson',
+  'Virginia Andrews',
+  'Kelly Snyder',
+];
 
 export const GroupForm = ({groupFormShow, handleGroupFormHide}) => {
-    const handleChange = (event) => {
-        const {
-          target: { value },
-        } = event;
-        setPersonName(
-          // On autofill we get a stringified value.
-          typeof value === 'string' ? value.split(',') : value,
-        );
-      };
+  const {data: permissions, isLoading} = useGetPermissionsQuery();
+  const [personName, setPersonName] = React.useState([]);
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    console.log(value);
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
   return (
     <>
       <Modal show={groupFormShow} size="lg" onHide={handleGroupFormHide}>
@@ -58,6 +70,8 @@ export const GroupForm = ({groupFormShow, handleGroupFormHide}) => {
                 label="Group Name"
                 />
                 <FormControl sx={{ m: 1, width: 300 }}>
+                  {isLoading?(<CircularProgress/>):(
+                    <>
                     <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
                     <Select
                     labelId="demo-multiple-checkbox-label"
@@ -69,13 +83,23 @@ export const GroupForm = ({groupFormShow, handleGroupFormHide}) => {
                     renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
                     >
-                    {names.map((name) => (
+                      {permissions.map((permission)=>(
+                        <MenuItem key={permission.id} value={permission.codename}>
+                          <Checkbox checked={personName.indexOf(permission.codename)> -1}/>
+                          <ListItemText primary={permission.codename}/>
+                        </MenuItem>
+                      ))}
+
+                    {/* {names.map((name) => (
                         <MenuItem key={name} value={name}>
                         <Checkbox checked={personName.indexOf(name) > -1} />
                         <ListItemText primary={name} />
                         </MenuItem>
-                    ))}
+                    ))} */}
                     </Select>
+                    </>
+                  )}
+                    
                 </FormControl>
                 
             </div>      

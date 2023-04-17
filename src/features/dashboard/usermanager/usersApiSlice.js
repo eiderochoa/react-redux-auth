@@ -40,6 +40,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         getPermission: builder.query({
             query: (id)=>'/permissions/'+id,
 
+        }),
+        getPermissions: builder.query({
+            query: ()=>'/permissions',
+            keepUnusedDataFor: 5
         })
     })
 })
@@ -50,5 +54,6 @@ export const {
     useUpdUserMutation,
     useDelUserMutation,
     useListGroupsQuery,
-    useGetPermissionQuery
+    useGetPermissionQuery,
+    useGetPermissionsQuery
 } = usersApiSlice 
