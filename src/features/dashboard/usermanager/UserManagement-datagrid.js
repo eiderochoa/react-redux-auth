@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import CheckIcon from '@mui/icons-material/Check';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -16,11 +16,10 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { GroupDataGrid } from './GroupDataGrid';
 
-import { useSelector } from "react-redux";
-import { selectCurrentUser, selectCurrentToken } from "../../auth/authSlice";
+// import { useSelector } from "react-redux";
+// import { selectCurrentUser, selectCurrentToken } from "../../auth/authSlice";
 import { useListUsersQuery, useAddUserMutation, useUpdUserMutation, useDelUserMutation } from './usersApiSlice';
 
 
@@ -70,7 +69,7 @@ function TabPanel(props) {
 
 export const UserManagementDataGrid = () =>{
     // useState Statement //
-    const { data: users, error, isLoading  } = useListUsersQuery();
+    const { data: users, error, isLoading, isError  } = useListUsersQuery();
     const [ addUser, {isLoading: formAddUserLoading}] = useAddUserMutation();
     const [ updUser, {isLoading: formUpdUserLoading}] = useUpdUserMutation();
     const [ delUser, {isLoading: usersIsReloading}] = useDelUserMutation();
@@ -87,8 +86,17 @@ export const UserManagementDataGrid = () =>{
     const [dataToDelete, setDataToDelete] = useState('');
     const [tab, setTab] = useState(0);
 
-    const user = useSelector(selectCurrentUser);
-    const token = useSelector(selectCurrentToken);
+    // const user = useSelector(selectCurrentUser);
+    // const token = useSelector(selectCurrentToken);
+
+    useEffect(() => {
+      setSnackError(isError);
+      if(error?.status !== undefined){
+        setSnackErrorText(error.status);
+      }
+      
+    }, [isError])
+    
 
     const columns = [
         {field: 'id', headerName: 'ID', width: 70},
@@ -286,7 +294,7 @@ export const UserManagementDataGrid = () =>{
 
     return(
         <>
-        {isLoading?(<CircularProgress/>):(<><Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <><Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs 
                 value={tab}
                 onChange={handleTabChange}
@@ -300,14 +308,14 @@ export const UserManagementDataGrid = () =>{
             <TabPanel value={tab} index={0}>
                 <Button variant='primary' className='m-1' onClick={handleShow}><PersonAddIcon/>{' '}Add User</Button>
                 <h5 className='text-center'>Users List</h5>
-                <Box sx={{ height: 400, width: '100%' }}>
-                    <DataGrid 
+                {isLoading?(<CircularProgress/>):(<> <Box sx={{ height: 400, width: '100%' }}>
+                {isError?(<></>):(<DataGrid 
                         rows={users.response}
                         columns={columns}
                         pageSize={5}
                         rowsPerPageOptions={[5]}
                         checkboxSelection                    
-                    />
+                    />)}
                     </Box>
                     <Modal show={show} size="lg" onHide={handleClose} onExited={handleModalHide}>
                         <Modal.Header closeButton>
@@ -331,20 +339,18 @@ export const UserManagementDataGrid = () =>{
                 delUser={deleteUser} 
                 handleAlertClose={handleAlertClose}
                 usersIsReloading={usersIsReloading}
-                />
+                /></>)}
 
             </TabPanel>
-            <TabPanel value={tab} index={1}>
-                <Button variant='primary' className='m-1'><PeopleAltIcon/>{' '}Add Group</Button>
-                <h5 className='text-center'>Groups List</h5>
+            <TabPanel value={tab} index={1}>                
                 <GroupDataGrid/>
             </TabPanel>
             
-            </>)}
+            </>
             
             {error?(<Snackbar open={snackError} autoHideDuration={6000} onClose={handleSnackHide}>
                 <Alert onClose={handleSnackHide} severity="error" sx={{ width: '100%' }}>
-                {error}
+                {snackErrorText}
                 </Alert>
             </Snackbar>):(<></>)}            
             

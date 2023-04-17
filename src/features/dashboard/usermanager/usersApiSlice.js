@@ -36,6 +36,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             query: ()=>'/groups',
             keepUnusedDataFor: 5,
             providesTags: ['Group']
+        }),
+        getPermission: builder.query({
+            query: (id)=>'/permissions/'+id,
+
         })
     })
 })
@@ -45,5 +49,6 @@ export const {
     useAddUserMutation,
     useUpdUserMutation,
     useDelUserMutation,
-    useListGroupsQuery
+    useListGroupsQuery,
+    useGetPermissionQuery
 } = usersApiSlice 
