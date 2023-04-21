@@ -16,7 +16,7 @@ export const PermissionListByGroup = ({showPermissionList, setShowPermissionList
         </Modal.Header>
         <Modal.Body>
             {idPermissionList.length === 0? (<Alert severity="warning">The group has not permission. </Alert>):(idPermissionList.map((el)=>{
-                return <PermissionItem groupname={groupName} idPermission={el}/>;
+                return <PermissionItem key={groupName+'-'+el} groupname={groupName} idPermission={el}/>;
             }))}
         </Modal.Body>
         <Modal.Footer>

@@ -9,8 +9,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { UserManagementDataGrid } from "./usermanager/UserManagement-datagrid";
 import RequireAuth from "../auth/RequireAuth";
 import { Link } from 'react-router-dom';
+import { useGetUserGroupsQuery } from "./usermanager/usersApiSlice";
 // Define the Login function.
 export const Home = () => {
+    const {data: userGroups} = useGetUserGroupsQuery();
     
      return(
         <>

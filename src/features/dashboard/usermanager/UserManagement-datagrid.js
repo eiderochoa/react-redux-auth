@@ -17,9 +17,6 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { GroupDataGrid } from './GroupDataGrid';
-
-// import { useSelector } from "react-redux";
-// import { selectCurrentUser, selectCurrentToken } from "../../auth/authSlice";
 import { useListUsersQuery, useAddUserMutation, useUpdUserMutation, useDelUserMutation } from './usersApiSlice';
 
 
@@ -148,40 +145,6 @@ export const UserManagementDataGrid = () =>{
     const handleAlertClose = () => setAlert(false);
     const handleTabChange = (event, newValue) => setTab(newValue); 
     
-    
-    // API Functions Statement //
-    // const getUsers = async () =>{
-    //     const res = await axios.get('http://localhost:8000/api/listusers',
-    //     {headers:{
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    //     }});
-    //     if(res.status === 200){
-    //         setUsers(res.data.response);
-    //     }else{
-    //         setSnackErrorText(res.message);
-    //         handleSnackShow();
-    //     }
-    // }
-
-    // const addUser = async (form) =>{
-    //     const res = await axios.post('http://localhost:8000/api/register/', form,
-    //     {headers:{
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    //     }});
-    //     if(res.status === 201){
-    //         handleClose();
-    //         setSnackSuccessText('User created succesfull');
-    //         handleSnackSuccessShow();
-    //         //getUsers();
-    //     }else if(res.response.status === 400){
-    //         setFormErrors(res.response.data);
-    //     }else{
-    //         setSnackErrorText(res.message);
-    //         handleSnackShow();
-    //     }
-    // }
 
     const createUser = async (form) =>{
         try {
@@ -217,27 +180,7 @@ export const UserManagementDataGrid = () =>{
             handleSnackShow();
         }
     }
-    // const updUser = async (form) =>{
-       
-    //     const res = await axios.put('http://localhost:8000/api/upduser/'+form.id, form,
-    //     {headers:{
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    //     }});
-    //     console.log(res);
-    //     if(res.status === 200){
-    //         handleClose();
-    //         setSnackSuccessText('User updated succesfull');
-    //         handleSnackSuccessShow();
-    //         //getUsers();
-    //     }else if(res.response.status === 400){
-    //         setFormErrors(res.response.data);
-    //     }else{
-    //         setSnackErrorText(res.message);
-    //         handleSnackShow();
-    //     }
-
-    // };
+    
 
     const showUpdateForm = (data) =>{
         setDataToEdit(data);
@@ -260,38 +203,7 @@ export const UserManagementDataGrid = () =>{
 
     } 
 
-    // const delUser = async (data) =>{
-    //     const res = await axios.get('http://localhost:8000/api/deluser/'+data.id,{headers:{
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    //     }});
-    //     if(res.status === 200){
-    //         handleAlertClose();
-    //         setSnackSuccessText('User deleted succesfull');
-    //         handleSnackSuccessShow();
-    //         //getUsers();
-    //     }else{
-    //         setSnackErrorText(res.message);
-    //         handleSnackShow();
-    //     }
-
-    // }
     
-    // useEffect Statement //
-    // useEffect(() => {
-    //     if(user === undefined){                   
-    //         window.location.href = '/'
-    //     }else{
-    //        getUsers();
-            
-    //     }
-      
-    // },[]);
-    
-
-    
-
-
     return(
         <>
         <><Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

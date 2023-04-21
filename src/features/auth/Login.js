@@ -10,6 +10,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import DB_header_login_img from '../../images/db_header_login_img.png';
 import { Alert, Snackbar } from '@mui/material';
+import { useGetUserGroupsMutation } from '../dashboard/usermanager/usersApiSlice';
 
 const Login = () => {
     const userRef = useRef()
@@ -62,37 +63,6 @@ const Login = () => {
     const handleUserInput = (e) => setUsername(e.target.value)
 
     const handlePwdInput = (e) => setPassword(e.target.value)
-
-    const content = isLoading ? <h1>Loading...</h1> : (
-        <section className="login">
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-
-            <h1>Employee Login</h1>
-
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Username:</label>
-                <input
-                    type="text"
-                    id="username"
-                    ref={userRef}
-                    value={username}
-                    onChange={handleUserInput}
-                    autoComplete="off"
-                    required
-                />
-
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    onChange={handlePwdInput}
-                    value={password}
-                    required
-                />
-                <button>Sign In</button>
-            </form>
-        </section>
-    )
 
     const content2 = (
       <>

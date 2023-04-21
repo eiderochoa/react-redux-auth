@@ -7,7 +7,7 @@ export const PermissionItem = ({idPermission,groupname}) => {
     const handleSnackHide = () => isError=false;
   return (
     <>
-        {isLoading?(<CircularProgress/>):(<p key={groupname}>{permission.name}</p>)}
+        {isLoading?(<CircularProgress/>):(<p>{permission.name}</p>)}
         {isError?(
           <Snackbar open={isError} autoHideDuration={6000} onClose={handleSnackHide}>
                 <Alert onClose={handleSnackHide} severity="error" sx={{ width: '100%' }}>

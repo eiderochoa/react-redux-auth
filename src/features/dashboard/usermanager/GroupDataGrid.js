@@ -6,11 +6,12 @@ import MuiAlert from '@mui/material/Alert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';
-import { useListGroupsQuery, useGetPermissionQuery } from './usersApiSlice';
+import { useListGroupsQuery, useGetPermissionQuery, useAddGroupMutation, useUpdGroupMutation, useDelGroupMutation } from './usersApiSlice';
 import { PermissionListByGroup } from './PermissionListByGroup';
 import { GroupForm } from './GroupForm';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ButtonBootstrab from 'react-bootstrap/Button';
+import { DeleteGroupAlert } from './DeleteGroupAlert';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -29,6 +30,12 @@ export const GroupDataGrid = () =>{
     const [snackSuccessText, setSnackSuccessText] = useState('');
 
     const [showGroupForm, setShowGroupForm] = useState(false);
+    const [addGroup] = useAddGroupMutation();
+    const [updGroup] = useUpdGroupMutation();
+    const [dataToEdit, setDataToEdit]=useState(null);
+    const [alert, setAlert] = useState(false);
+    const [dataToDelete, setDataToDelete] = useState('');
+    const [delGroup, {isLoading: groupsIsReloading}] = useDelGroupMutation();
 
     useEffect(() => {
         setSnackError(isError);
@@ -54,12 +61,12 @@ export const GroupDataGrid = () =>{
             return(
                 <>
                 <Tooltip title="Delete">
-                    <IconButton   aria-label="delete" color='error'>
+                    <IconButton onClick={(e)=>{setDataToDelete(params.row);setAlert(true);}}  aria-label="delete" color='error'>
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>{' '}
                 <Tooltip title="Edit">
-                    <IconButton  aria-label="edit" color='primary'>
+                    <IconButton onClick={(e)=>showEditForm(params.row)}   aria-label="edit" color='primary'>
                         <EditIcon />
                     </IconButton>
                 </Tooltip>            
@@ -68,20 +75,6 @@ export const GroupDataGrid = () =>{
         }}
     ]
 
-
-
-
-    // const getGroups = async () => {
-    //     const res = await axios.get('http://localhost:8000/api/groups/',
-    //     {headers:{
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    //     }});
-    //     if(res.status === 200){
-    //         console.log(res.data);
-    //         setPermission(res.data);
-    //     }
-    // }
 
     const GetParmission = async (id) =>{
         try{
@@ -94,6 +87,51 @@ export const GroupDataGrid = () =>{
         }
         
     }
+    const createGroup = async (form) =>{
+        try {
+            const res = await addGroup(form);
+            if(res?.data){
+                handleGroupFormHide();
+                setSnackSuccessText(`The group ${form.name} was created successfull.`);
+                handleSnackSuccessShow();
+            }
+        } catch (error) {
+            setSnackErrorText(error.data);
+            handleSnackShow();            
+        }
+    }
+
+    const updateGroup = async (form) =>{
+        try {
+            const res = await updGroup(form);
+            if(res?.data){
+                handleGroupFormHide();
+                setSnackSuccessText(`The group ${form.name} was updated successfull.`);
+                handleSnackSuccessShow();
+            }
+        } catch (error) {
+            setSnackErrorText(error.data);
+            handleSnackShow();
+        }
+    }
+
+    const deleteGroup = async (data) =>{
+        try {
+            const res = await delGroup(data);
+            handleAlertClose();
+            setSnackSuccessText(`Group ${data.name} deleted succesfull`);
+            handleSnackSuccessShow();
+        } catch (error) {
+            setSnackErrorText(error.data);
+            handleSnackShow();
+        }
+        
+    }
+
+    const showEditForm = (data) =>{
+        setDataToEdit(data);
+        handleGroupFormShow();
+    }
 
     const ShowPermissionListModal=(listIdPermissions, gname)=>{
         setIdPermissionList(listIdPermissions);
@@ -101,9 +139,13 @@ export const GroupDataGrid = () =>{
         setShowPermissionList(true);      
     }
     const handleClose = () => setShowPermissionList(false);
+    const handleSnackShow = () => setSnackError(true);
     const handleSnackHide = () => setSnackError(false);
     const handleGroupFormShow = () => setShowGroupForm(true);
     const handleGroupFormHide = () => setShowGroupForm(false);
+    const handleSnackSuccessHide = () => setSnackSuccess(false);
+    const handleSnackSuccessShow = () => setSnackSuccess(true);
+    const handleAlertClose = () => setAlert(false);
 
     return(
         <>
@@ -130,7 +172,14 @@ export const GroupDataGrid = () =>{
         groupName={groupName}
             handleClose={handleClose}
         />):(<></>)}
-        <GroupForm groupFormShow={showGroupForm} handleGroupFormHide={handleGroupFormHide}/>
+        <GroupForm 
+        groupFormShow={showGroupForm} 
+        handleGroupFormHide={handleGroupFormHide} 
+        createGroup={createGroup}
+        updateGroup={updateGroup}
+        dataToEdit={dataToEdit}
+        setDataToEdit={setDataToEdit}
+        />
         {isError?(
             <Snackbar open={snackError} autoHideDuration={6000} onClose={handleSnackHide}>
                 <Alert onClose={handleSnackHide} severity="error" sx={{ width: '100%' }}>
@@ -138,7 +187,18 @@ export const GroupDataGrid = () =>{
                 </Alert>
             </Snackbar>)
         :(<></>)}
-        
+        <Snackbar open={snackSuccess} autoHideDuration={6000} onClose={handleSnackSuccessHide}>
+                <Alert onClose={handleSnackSuccessHide} severity="success" sx={{ width: '100%' }}>
+                {snackSuccessText}
+                </Alert>
+        </Snackbar>
+        <DeleteGroupAlert 
+        show={alert} 
+        groupData={dataToDelete}
+        deleteGroup={deleteGroup}
+        handleAlertClose={handleAlertClose}
+        groupsIsReloading={groupsIsReloading}
+        />
         </>
     );
 }

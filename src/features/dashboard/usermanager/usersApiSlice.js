@@ -31,6 +31,15 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['User']
         }),
+        userProfile: builder.query({
+            query: ()=> '/profile/',
+            keepUnusedDataFor: 5,
+        }),
+        getUserGroups: builder.query({
+            query: ()=>'/getusergroups/',
+            keepUnusedDataFor: 5
+            
+        }),
         // Groups
         listGroups: builder.query({
             query: ()=>'/groups',
@@ -44,6 +53,29 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         getPermissions: builder.query({
             query: ()=>'/permissions',
             keepUnusedDataFor: 5
+        }),
+        addGroup: builder.mutation({
+            query: groupData => ({
+                url: '/addgroup/',
+                method: 'POST',
+                body: {...groupData}
+            }),
+            invalidatesTags: ['Group']
+        }),
+        updGroup: builder.mutation({
+            query: groupData => ({
+                url: `/updgroup/${groupData.id}/`,
+                method: 'PUT',
+                body: {...groupData}
+            }),
+            invalidatesTags: ['Group']
+        }),
+        delGroup: builder.mutation({
+            query: groupData => ({
+                url: `/delgroup/${groupData.id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags:['Group']
         })
     })
 })
@@ -55,5 +87,10 @@ export const {
     useDelUserMutation,
     useListGroupsQuery,
     useGetPermissionQuery,
-    useGetPermissionsQuery
+    useGetPermissionsQuery,
+    useAddGroupMutation,
+    useUpdGroupMutation,
+    useDelGroupMutation,
+    useUserProfileQuery,
+    useGetUserGroupsQuery
 } = usersApiSlice 
