@@ -18,6 +18,8 @@ import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { GroupDataGrid } from './GroupDataGrid';
 import { useListUsersQuery, useAddUserMutation, useUpdUserMutation, useDelUserMutation } from './usersApiSlice';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import { SetUserGroupsModal } from './SetUserGroupsModal';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -73,6 +75,7 @@ export const UserManagementDataGrid = () =>{
 
     // const [users, setUsers] = useState([]);
     const [show, setShow] = useState(false);
+    const [showSetUserGroupModal, setShowSetUserGroupModal] = useState(false);
     const [snackError, setSnackError] = useState(false);
     const [snackErrorText, setSnackErrorText] = useState('');
     const [snackSuccess, setSnackSuccess] = useState(false);
@@ -82,6 +85,8 @@ export const UserManagementDataGrid = () =>{
     const [alert, setAlert] = useState(false);
     const [dataToDelete, setDataToDelete] = useState('');
     const [tab, setTab] = useState(0);
+    const [userId, setUserId] = useState(1);
+    const [userName, setUserName] = useState('');
 
     // const user = useSelector(selectCurrentUser);
     // const token = useSelector(selectCurrentToken);
@@ -127,6 +132,9 @@ export const UserManagementDataGrid = () =>{
                     <IconButton onClick={(e)=>showUpdateForm(params.row)} aria-label="edit" color='primary'>
                         <EditIcon />
                     </IconButton>
+                </Tooltip>{' '}
+                <Tooltip title="Add to Group">
+                    <IconButton onClick={(e)=>showSetUserGroupModalForm(params.row.id,params.row.username)} aria-label="addgroup" color='info'><GroupAddIcon/></IconButton>
                 </Tooltip>            
                 </>
             );
@@ -143,7 +151,9 @@ export const UserManagementDataGrid = () =>{
     const handleSnackSuccessHide = () => setSnackSuccess(false);
     const handleModalHide = () => setFormErrors(initialErrors);
     const handleAlertClose = () => setAlert(false);
-    const handleTabChange = (event, newValue) => setTab(newValue); 
+    const handleTabChange = (event, newValue) => setTab(newValue);
+    const handleShowSetUserGroupsModal = () => setShowSetUserGroupModal(true);
+    const handleHideSetUserGroupsModal = () => setShowSetUserGroupModal(false); 
     
 
     const createUser = async (form) =>{
@@ -201,7 +211,13 @@ export const UserManagementDataGrid = () =>{
             handleSnackShow();
         }
 
-    } 
+    }
+    
+    const showSetUserGroupModalForm = (userId, userName) =>{
+        setUserId(userId);
+        setUserName(userName);
+        handleShowSetUserGroupsModal();
+    }
 
     
     return(
@@ -245,6 +261,13 @@ export const UserManagementDataGrid = () =>{
                         />
                         </Modal.Body>                
                     </Modal>
+                    <SetUserGroupsModal
+                        show={showSetUserGroupModal}
+                        handleClose={handleHideSetUserGroupsModal}
+                        handleModalHide={handleHideSetUserGroupsModal}
+                        userId={userId} 
+                        userName={userName}
+                    />
                 <DeleteUserAlert 
                 show={alert} 
                 userData={dataToDelete} 

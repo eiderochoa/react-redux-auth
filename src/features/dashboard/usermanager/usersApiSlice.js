@@ -40,6 +40,20 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             keepUnusedDataFor: 5
             
         }),
+        getUsersGroups: builder.query({
+            query: (id) => ({
+                url: '/getusersgroups/'+id,
+                method: 'GET'
+            })
+        }),
+        setUserGroups: builder.mutation({
+            query: (data)=>({
+                url: '/setusergroups/',
+                method: 'POST',
+                body: {...data}
+            }),
+            invalidatesTags: ['User']
+        }),
         // Groups
         listGroups: builder.query({
             query: ()=>'/groups',
@@ -92,5 +106,7 @@ export const {
     useUpdGroupMutation,
     useDelGroupMutation,
     useUserProfileQuery,
-    useGetUserGroupsQuery
+    useGetUserGroupsQuery,
+    useGetUsersGroupsQuery,
+    useSetUserGroupsMutation
 } = usersApiSlice 
